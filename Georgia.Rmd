@@ -1,0 +1,44 @@
+---
+title: "Georgia"
+author: "Eric Fan"
+date: "2/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(lubridate)
+```
+```{r}
+Fulton0_clean <- Fulton0_extraction %>%
+  separate(date, c("weekDay","dateTime"),sep = " ", extra = "merge") %>%
+  mutate(dateTime_clean = mdy_hms(dateTime),
+         weekDay_clean = weekdays(dateTime_clean))
+```
+
+
+```{r}
+Fulton_clean <- Fulton0_extraction %>%
+  separate(date, c("weekDay","dateTime"),sep = " ", extra = "merge") %>%
+  mutate(dateTime_clean = mdy_hms(dateTime),
+         weekDay_clean = weekdays(dateTime_clean))
+
+Fulton_clean %>%
+  mutate(test = weekdays(date_clean))
+
+Fulton_clean %>%
+  ggplot(aes(x=dateTime_clean)) +
+  geom_density()
+
+Fulton_clean %>%
+  group_by(weekDay_clean) %>%
+  summarise(count=n()) %>%
+  ggplot(aes(x= weekDay_clean, y = count)) +
+  geom_col()
+```
+
